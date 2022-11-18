@@ -2,6 +2,7 @@
 # https://hub.docker.com/layers/tomcat/library/tomcat/9.0.59-jdk11/images/sha256-383a062a98c70924fb1b1da391a054021b6448f0aa48860ae02f786aa5d4e2ad?context=explore
 FROM lunasec/tomcat-9.0.59-jdk11
 
+ENV test=test
 ADD src/ /helloworld/src
 ADD pom.xml /helloworld
 
