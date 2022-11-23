@@ -13,7 +13,7 @@ jobs:
         
       - name: Set the GITHUB_WORKSPACE as a safe directory.
         run: |
-          git config --global --add safe.directory /github/workspace
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
       - name: Run Trivy vulnerability scanner in IaC mode
         uses: aquasecurity/trivy-action@master
