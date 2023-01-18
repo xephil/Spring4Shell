@@ -36,16 +36,21 @@ jobs:
           TRIVY_RUN_AS_PLUGIN: 'aqua'
           AQUA_URL: https://api.asia-1.supply-chain.cloud.aquasec.com
           CSPM_URL: https://asia-1.api.cloudsploit.com
+  
   build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag stanhoe/spring4shell:$GITHUB_SHA
+      run: |
+        docker build . --file Dockerfile --tag stanhoe/spring4shell:$GITHUB_SHA
+        docker image ls
+        
     - name: Aqua Image Scanner
       run: |
         docker login registry.aquasec.com -u $AQUA_USER -p $AQUA_PASSWORD
         docker pull registry.aquasec.com/scanner:2022.4
+        docker image ls
         docker run --rm -v $GITHUB_WORKSPACE:/tmp -v /var/run/docker.sock:/var/run/docker.sock -e BUILD_NUMBER=$BUILD_NUMBER -e BUILD_JOB_NAME=$BUILD_NAME registry.aquasec.com/scanner:2301.4.6 scan -w /tmp --host $AQUA_HOST --token $AQUA_TOKEN --show-negligible --local stanhoe/spring4shell:$GITHUB_SHA --htmlfile /tmp/out.html --jsonfile /tmp/out.json > /dev/null
 
     - name: Push the Docker image to docker repo
