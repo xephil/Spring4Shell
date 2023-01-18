@@ -42,7 +42,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag $IMAGE_NAME
+      run: docker build -t $IMAGE_NAME .
     - name: Aqua Scanner
       run: |
         docker login registry.aquasec.com -u $AQUA_USER -p $AQUA_PASSWORD
