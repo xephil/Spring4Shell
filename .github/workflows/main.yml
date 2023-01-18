@@ -46,7 +46,7 @@ jobs:
       run: |
         docker login registry.aquasec.com -u $AQUA_USER -p $AQUA_PASSWORD
         docker pull registry.aquasec.com/scanner:2022.4
-        docker run -v /var/run/docker.sock:/var/run/docker.sock registry.aquasec.com/scanner:2022.4 scan -H $AQUA_HOST -A $AQUA_TOKEN --local --image-name $IMAGE_NAME
+        docker run --rm -v $GITHUB_WORKSPACE:/tmp -v /var/run/docker.sock:/var/run/docker.sock -e BUILD_NUMBER=$BUILD_NUMBER -e BUILD_JOB_NAME=$BUILD_NAME registry.aquasec.com/scanner:2301.4.6 scan -w /tmp --host $AQUA_HOST --token $AQUA_TOKEN --show-negligible --local $IMAGE_NAME --htmlfile /tmp/out.html --jsonfile /tmp/out.json > /dev/null
 
     - name: Push the Docker image to docker repo
       run: |   
