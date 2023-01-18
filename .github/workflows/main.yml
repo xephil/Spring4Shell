@@ -16,7 +16,7 @@ env:
   
 jobs:
   aqua:
-    name: trivy
+    name: Use Aqua Supply Chain Security Scanner Trivy to scan the repo 
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -40,13 +40,16 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag stanhoe/spring4shell:$GITHUB_SHA
+      run: docker build . --file Dockerfile --tag $IMAGE_NAME
+    
     - name: Aqua Scanner
       run: |
         docker login registry.aquasec.com -u $AQUA_USER -p $AQUA_PASSWORD
         docker pull registry.aquasec.com/scanner:2022.4
-        docker run --rm -v $GITHUB_WORKSPACE:/tmp -v /var/run/docker.sock:/var/run/docker.sock -e BUILD_NUMBER=$BUILD_NUMBER -e BUILD_JOB_NAME=$BUILD_NAME registry.aquasec.com/scanner:2022.4 scan -w /tmp --host $AQUA_HOST --token $AQUA_TOKEN --show-negligible --local stanhoe/spring4shell:$GITHUB_SHA --htmlfile /tmp/out.html --jsonfile /tmp/out.json > /dev/null
-        # login and push to private docker repo
+        docker run --rm -v $GITHUB_WORKSPACE:/tmp -v /var/run/docker.sock:/var/run/docker.sock -e BUILD_NUMBER=$BUILD_NUMBER -e BUILD_JOB_NAME=$BUILD_NAME registry.aquasec.com/scanner:2022.4 scan --host $AQUA_HOST --token $AQUA_TOKEN --show-negligible --local $IMAGE_NAME --htmlfile /tmp/out.html --jsonfile /tmp/out.json > /dev/null
+ 
+    - name: Push the Docker image to docker repo
+      run: |   
         docker login --username $DOCKER_USER --password $DOCKER_PASSWORD
         docker push $IMAGE_NAME  
        
