@@ -3,8 +3,7 @@ name: Docker Image CI
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+
 env:
   AQUA_USER: ${{ secrets.AQUA_USER }} # Aqua Registry
   AQUA_PASSWORD: ${{ secrets.AQUA_PASSWORD }} # Aqua Registry
@@ -16,6 +15,27 @@ env:
   IMAGE_NAME: stanhoe/spring4shell:${{ github.sha }}
   
 jobs:
+  aqua:
+    name: Aqua Supply-chain Security 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Aqua SCS Scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          security-checks: 'vuln,config,secret'
+          hide-progress: false
+          format: 'table'
+        env:
+          AQUA_KEY: ${{ secrets.AQUA_KEY }}
+          AQUA_SECRET: ${{ secrets.AQUA_SECRET }}
+          TRIVY_RUN_AS_PLUGIN: 'aqua'
+          AQUA_URL: https://api.asia-1.supply-chain.cloud.aquasec.com
+          CSPM_URL: https://asia-1.api.cloudsploit.com
+          
   build:
     runs-on: ubuntu-latest
     steps:
