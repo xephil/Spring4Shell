@@ -13,7 +13,7 @@ env:
   BUILD_NUMBER: ${{ github.run_id }}
   BUILD_NAME: ${{ github.repository }}
   GITHUB_WORKSPACE: ${{ github.workspace }}
-  IMAGE_NAME: "stanhoe/spring4shell:$GITHUB_SHA"
+  IMAGE_NAME: stanhoe/spring4shell:$GITHUB_SHA
   
 jobs:
   aqua:
@@ -43,11 +43,16 @@ jobs:
     - uses: actions/checkout@v3
     - name: Build the Docker image
       run: docker build -t $IMAGE_NAME .
-    - name: Aqua Scanner
+    - name: Aqua Image Scanner
       run: |
         docker login registry.aquasec.com -u $AQUA_USER -p $AQUA_PASSWORD
         docker pull registry.aquasec.com/scanner:2022.4
         docker run --rm -v $GITHUB_WORKSPACE:/tmp -v /var/run/docker.sock:/var/run/docker.sock -e BUILD_NUMBER=$BUILD_NUMBER -e BUILD_JOB_NAME=$BUILD_NAME registry.aquasec.com/scanner:2022.4 scan -w /tmp --host $AQUA_HOST --token $AQUA_TOKEN --show-negligible --local $IMAGE_NAME --htmlfile /tmp/out.html --jsonfile /tmp/out.json > /dev/null
+   
+    - name: Push to docker registry
+      run: |
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD    
+        docker push $IMAGE_NAME
     
     - uses: actions/upload-artifact@v3
       with:
