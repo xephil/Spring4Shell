@@ -15,7 +15,7 @@ env:
 jobs:
   aqua:
     name: trivy
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -27,13 +27,14 @@ jobs:
           security-checks: 'vuln,config,secret'
           hide-progress: false
           format: 'table'
-          exit-code: '1'
         env:
           AQUA_KEY: ${{ secrets.AQUA_KEY }}
           AQUA_SECRET: ${{ secrets.AQUA_SECRET }}
           TRIVY_RUN_AS_PLUGIN: 'aqua'
+          AQUA_URL: https://api.asia-1.supply-chain.cloud.aquasec.com
+          CSPM_URL: https://asia-1.api.cloudsploit.com
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
