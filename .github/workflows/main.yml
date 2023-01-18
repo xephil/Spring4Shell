@@ -46,8 +46,8 @@ jobs:
       run: |
         docker login registry.aquasec.com -u $AQUA_USER -p $AQUA_PASSWORD
         docker pull registry.aquasec.com/scanner:2022.4
-        docker run --rm -v /var/run/docker.sock:/var/run/docker.sock registry.aquasec.com/scanner:2022.4 scan --local --image-name $IMAGE_NAME --host $AQUA_HOST --token $AQUA_TOKEN --show-negligible
- 
+        docker run -v /var/run/docker.sock:/var/run/docker.sock registry.aquasec.com/scanner:2022.4 scan -H $AQUA_HOST -A $AQUA_TOKEN --local $IMAGE_NAME
+
     - name: Push the Docker image to docker repo
       run: |   
         docker login --username $DOCKER_USER --password $DOCKER_PASSWORD
