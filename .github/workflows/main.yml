@@ -49,9 +49,10 @@ jobs:
     - name: Aqua Image Scanner
       run: |
         docker image ls 
+        docker pull stanhoe/spring4shell:latest
         docker login registry.aquasec.com -u $AQUA_USER -p $AQUA_PASSWORD
         docker pull registry.aquasec.com/scanner:2301.4.6
-        docker run --rm -v $GITHUB_WORKSPACE:/tmp -v /var/run/docker.sock:/var/run/docker.sock -e BUILD_NUMBER=$BUILD_NUMBER -e BUILD_JOB_NAME=$BUILD_NAME registry.aquasec.com/scanner:2022.4 scan -w /tmp --host $AQUA_HOST --token $AQUA_TOKEN --show-negligible --local $IMAGE_NAME --htmlfile /tmp/out.html --jsonfile /tmp/out.json > /dev/null
+        docker run --rm -v $GITHUB_WORKSPACE:/tmp -v /var/run/docker.sock:/var/run/docker.sock -e BUILD_NUMBER=$BUILD_NUMBER -e BUILD_JOB_NAME=$BUILD_NAME registry.aquasec.com/scanner:2022.4 scan -w /tmp --host $AQUA_HOST --token $AQUA_TOKEN --show-negligible --local stanhoe/spring4shell:latest --htmlfile /tmp/out.html --jsonfile /tmp/out.json > /dev/null
     - name: Push Docker image to repository
       run: |
         docker login --username $DOCKER_USERNAME --password $DOCKER_PASSWORD
