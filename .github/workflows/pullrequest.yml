@@ -7,6 +7,15 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        
+      - name: Setup Pipeline Enforcer
+        uses: aquasecurity/pipeline-enforcer-action@v1.0.0
+        env:
+          CSPM_URL: https://asia-1.api.cloudsploit.com
+          AQUA_URL: https://api.asia-1.supply-chain.cloud.aquasec.com
+        with:
+          aqua-key: ${{ secrets.AQUA_KEY }}
+          aqua-secret: ${{ secrets.AQUA_SECRET }}
 
       - name: Run Aqua scanner
         uses: docker://aquasec/aqua-scanner
