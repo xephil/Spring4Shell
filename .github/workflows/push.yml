@@ -24,8 +24,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        
+      - name: Setup Aqua Pipeline Enforcer
+        uses: aquasecurity/pipeline-enforcer-action@v1.0.0
+        env:
+          CSPM_URL: https://asia-1.api.cloudsploit.com
+          AQUA_URL: https://api.asia-1.supply-chain.cloud.aquasec.com
+        with:
+          aqua-key: ${{ secrets.AQUA_KEY }}
+          aqua-secret: ${{ secrets.AQUA_SECRET }}
 
-      - name: Run Aqua scanner
+      - name: Run Aqua Scanner
         uses: docker://aquasec/aqua-scanner
         with:
           args: trivy fs --security-checks config,vuln,secret --sast . 
@@ -38,6 +47,7 @@ jobs:
           AQUA_URL: https://api.asia-1.supply-chain.cloud.aquasec.com
           CSPM_URL: https://asia-1.api.cloudsploit.com
           TRIVY_RUN_AS_PLUGIN: 'aqua'
+          
       - name: Aqua Release Artifact 
         run: |
           export BILLY_SERVER=https://billy.asia-1.codesec.aquasec.com
