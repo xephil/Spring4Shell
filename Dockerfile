@@ -14,7 +14,7 @@ RUN mvn clean package
 #  Deploy to tomcat
 RUN mv target/helloworld.war /usr/local/tomcat/webapps/
 
-ARG USERNAME=user-name-goes-here
+ARG USERNAME=stan
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
