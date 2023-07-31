@@ -2,7 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+    - main
+    - test1
 
 env:
   AQUA_USER: ${{ secrets.AQUA_USER }} # Aqua Registry
