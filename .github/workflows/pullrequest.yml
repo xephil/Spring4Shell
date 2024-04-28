@@ -9,7 +9,7 @@ jobs:
         uses: actions/checkout@v2
         
       - name: Setup Pipeline Enforcer
-        uses: aquasecurity/pipeline-enforcer-action@v1.0.0
+        uses: aquasecurity/pipeline-enforcer-action@main
         env:
           CSPM_URL: https://asia-1.api.cloudsploit.com
           AQUA_URL: https://api.asia-1.supply-chain.cloud.aquasec.com
