@@ -53,7 +53,7 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
         
-      - name: Aqua Image Scanner
+      - name: Run Aqua Image Scanner
         run: |
           docker image ls 
           docker login registry.aquasec.com -u $AQUA_USER -p $AQUA_PASSWORD
@@ -65,7 +65,7 @@ jobs:
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker push $IMAGE_NAME 
   
-      - name: Aqua Release Artifact (SBOM)
+      - name: Run Aqua Release Artifact (SBOM)
         run: |
             export BILLY_SERVER=https://billy.asia-1.codesec.aquasec.com
             curl -sLo install.sh download.codesec.aquasec.com/billy/install.sh
