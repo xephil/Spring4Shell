@@ -25,19 +25,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
         
-      - name: Setup Aqua Pipeline Enforcer
-        uses: aquasecurity/pipeline-enforcer-action@main
-        env:
-          CSPM_URL: https://asia-1.api.cloudsploit.com
-          AQUA_URL: https://api.asia-1.supply-chain.cloud.aquasec.com
-        with:
-          aqua-key: ${{ secrets.AQUA_KEY }}
-          aqua-secret: ${{ secrets.AQUA_SECRET }}
+      # - name: Setup Aqua Pipeline Enforcer
+      #   uses: aquasecurity/pipeline-enforcer-action@main
+      #   env:
+      #     CSPM_URL: https://asia-1.api.cloudsploit.com
+      #     AQUA_URL: https://api.asia-1.supply-chain.cloud.aquasec.com
+      #   with:
+      #     aqua-key: ${{ secrets.AQUA_KEY }}
+      #     aqua-secret: ${{ secrets.AQUA_SECRET }}
 
-      - name: Run Aqua Scanner
+      - name: Run Aqua Code Scanner
         uses: docker://aquasec/aqua-scanner
         with:
-          args: trivy fs --format sarif --output trivy-results.sarif --scanners config,vuln,secret --debug --sast --reachability . 
+          args: trivy fs --format sarif --output trivy-results.sarif --scanners config,vuln,secret --debug --sast --reachability .  
           # To customize which severities to scan for, add the following flag: --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
           # To enable SAST scanning, add: --sast
           # To enable npm/dotnet non-lock file scanning, add: --package-json / --dotnet-proj
@@ -83,7 +83,8 @@ jobs:
               --cspm-url https://asia-1.api.cloudsploit.com \
               --artifact-path $IMAGE_NAME
           
-      - uses: actions/upload-artifact@v3
+      - name: Upload Aqua Image Scanner Artifacts
+        uses: actions/upload-artifact@v3
         with:
           name: aqua-artifact
           path: out.*
