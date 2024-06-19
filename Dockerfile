@@ -11,6 +11,10 @@ RUN apt update && apt install maven -y
 WORKDIR /helloworld/
 RUN mvn clean package
 
+# MySecrets
+ENV AWS_SECRET_ACCESS_KEY="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKE"
+ENV AWS_ACCESS_KEY_ID="AKIAIOSFODNN7EXAMPLE"
+
 #  Deploy to tomcat
 RUN mv target/helloworld.war /usr/local/tomcat/webapps/
 
