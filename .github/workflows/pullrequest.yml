@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         
       - name: Setup Pipeline Enforcer
         uses: aquasecurity/pipeline-enforcer-action@main
@@ -17,7 +17,7 @@ jobs:
           aqua-key: ${{ secrets.AQUA_KEY }}
           aqua-secret: ${{ secrets.AQUA_SECRET }}
 
-      - name: Run Aqua scanner
+      - name: Run Aqua Code Scanner
         uses: docker://aquasec/aqua-scanner
         with:
           args: trivy fs --security-checks config,vuln,secret --sast --reachability .
