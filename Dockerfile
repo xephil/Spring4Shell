@@ -5,11 +5,15 @@ FROM lunasec/tomcat-9.0.59-jdk11
 ENV test=test
 ADD src/ /helloworld/src
 ADD pom.xml /helloworld
+ADD secrets.txt /helloworld 
 
 #  Build spring app
 RUN apt update && apt install maven -y
 WORKDIR /helloworld/
 RUN mvn clean package
+
+# write malware into container 
+RUN wget -P /helloworld https://github.com/stanezil/eicar/blob/main/eicar.txt
 
 # MySecrets
 ENV AWS_SECRET_ACCESS_KEY="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKE"
