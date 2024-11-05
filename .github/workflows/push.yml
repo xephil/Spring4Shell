@@ -29,7 +29,7 @@ jobs:
       - name: Run Aqua Code Scanner
         uses: docker://aquasec/aqua-scanner
         with:
-          args: trivy fs --scanners misconfig,vuln,secret . --sast --reachability --format template -o aqua-code-scanner.html
+          args: trivy fs --scanners misconfig,vuln,secret . --sast --reachability --format template -o aqua-code-scanner.html --db-repository=registry.aquasec.com/trivy-db:2 --checks-bundle-repository=registry.aquasec.com/trivy-checks:1 --java-db-repository=registry.aquasec.com/trivy-java-db:1
           # To customize which severities to scan for, add the following flag: --severity UNKNOWN,LOW,MEDIUM,HIGH,CRITICAL
           # To enable SAST scanning, add: --sast
           # To enable reachability scanning, add: --reachability
@@ -42,6 +42,8 @@ jobs:
           CSPM_URL: https://asia-1.api.cloudsploit.com
           TRIVY_RUN_AS_PLUGIN: 'aqua'
           INPUT_WORKING_DIRECTORY: '/scanning'
+          TRIVY_USERNAME: $AQUA_USER
+          TRIVY_PASSWORD: $AQUA_PASSWORD
           # For http/https proxy configuration add env vars: HTTP_PROXY/HTTPS_PROXY, CA-CRET (path to CA certificate)
         
       - name: Upload Aqua Code Scanner Results as Artifact
@@ -67,6 +69,12 @@ jobs:
             --aqua-secret "${{ secrets.AQUA_SECRET }}" \
             --cspm-url https://asia-1.api.cloudsploit.com \
             --artifact-path "$GITHUB_WORKSPACE"
+        env:
+          TRIVY_USERNAME: $AQUA_USER
+          TRIVY_PASSWORD: $AQUA_PASSWORD
+          TRIVY_DB_REPOSITORY: registry.aquasec.com/trivy-db:2
+          TRIVY_JAVA_DB_REPOSITORY: registry.aquasec.com/trivy-java-db:1
+          TRIVY_CHECKS_BUNDLE_REPOSITORY: registry.aquasec.com/trivy-checks:1
 
   image-scanning:
     name: Aqua Image Scanner
@@ -110,6 +118,12 @@ jobs:
             --aqua-secret "${{ secrets.AQUA_SECRET }}" \
             --cspm-url https://asia-1.api.cloudsploit.com \
             --artifact-path "$DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG"
+        env:
+          TRIVY_USERNAME: $AQUA_USER
+          TRIVY_PASSWORD: $AQUA_PASSWORD
+          TRIVY_DB_REPOSITORY: registry.aquasec.com/trivy-db:2
+          TRIVY_JAVA_DB_REPOSITORY: registry.aquasec.com/trivy-java-db:1
+          TRIVY_CHECKS_BUNDLE_REPOSITORY: registry.aquasec.com/trivy-checks:1
             
       - name: Tag and push image to Docker Hub (+latest)
         run: |
