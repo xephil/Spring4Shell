@@ -44,8 +44,6 @@ jobs:
           CSPM_URL: https://asia-1.api.cloudsploit.com
           TRIVY_RUN_AS_PLUGIN: 'aqua'
           INPUT_WORKING_DIRECTORY: '/scanning'
-          TRIVY_USERNAME: $AQUA_USER
-          TRIVY_PASSWORD: $AQUA_PASSWORD
           # For http/https proxy configuration add env vars: HTTP_PROXY/HTTPS_PROXY, CA-CRET (path to CA certificate)
         
       - name: Upload Aqua Code Scanner Results as Artifact
@@ -121,8 +119,8 @@ jobs:
             --cspm-url https://asia-1.api.cloudsploit.com \
             --artifact-path "$DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG"
         env:
-          TRIVY_USERNAME: $AQUA_USER
-          TRIVY_PASSWORD: $AQUA_PASSWORD
+          TRIVY_USERNAME: ${{ secrets.AQUA_USER }}
+          TRIVY_PASSWORD: ${{ secrets.AQUA_PASSWORD }}
           TRIVY_DB_REPOSITORY: registry.aquasec.com/trivy-db:2
           TRIVY_JAVA_DB_REPOSITORY: registry.aquasec.com/trivy-java-db:1
           TRIVY_CHECKS_BUNDLE_REPOSITORY: registry.aquasec.com/trivy-checks:1
