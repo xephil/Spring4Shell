@@ -35,6 +35,8 @@ jobs:
           # To enable reachability scanning, add: --reachability
           # To enable npm/dotnet/gradle non-lock file scanning, add: --package-json / --dotnet-proj / --gradle
         env:
+          TRIVY_USERNAME: ${{ secrets.AQUA_USER }}
+          TRIVY_PASSWORD: ${{ secrets.AQUA_PASSWORD }}
           AQUA_KEY: ${{ secrets.AQUA_KEY }}
           AQUA_SECRET: ${{ secrets.AQUA_SECRET }}
           GITHUB_TOKEN: ${{ github.token }}
@@ -70,8 +72,8 @@ jobs:
             --cspm-url https://asia-1.api.cloudsploit.com \
             --artifact-path "$GITHUB_WORKSPACE"
         env:
-          TRIVY_USERNAME: $AQUA_USER
-          TRIVY_PASSWORD: $AQUA_PASSWORD
+          TRIVY_USERNAME: ${{ secrets.AQUA_USER }}
+          TRIVY_PASSWORD: ${{ secrets.AQUA_PASSWORD }}
           TRIVY_DB_REPOSITORY: registry.aquasec.com/trivy-db:2
           TRIVY_JAVA_DB_REPOSITORY: registry.aquasec.com/trivy-java-db:1
           TRIVY_CHECKS_BUNDLE_REPOSITORY: registry.aquasec.com/trivy-checks:1
