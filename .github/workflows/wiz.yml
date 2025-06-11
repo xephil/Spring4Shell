@@ -30,6 +30,9 @@ jobs:
 
       - name: Download Wiz CLI
         run: curl -o wizcli https://downloads.wiz.io/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
+
+      - name: Run Wiz CLI dir scan
+        run: ./wizcli dir scan --path $SCAN_PATH 
   
   
   wiz-cli-image-scan:
@@ -75,5 +78,4 @@ jobs:
           WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
           WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
 
-      - name: Run wiz CLI IaC scan
-        run: ./wizcli iac scan --path $SCAN_PATH 
+      
