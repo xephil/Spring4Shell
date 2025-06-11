@@ -7,8 +7,8 @@ on:
 env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      DOCKER_REGISTRY: "stanhoe"
-      DOCKER_REPOSITORY: "spring4shell2"
+      # DOCKER_REGISTRY: "stanhoe"
+      # DOCKER_REPOSITORY: "spring4shell2"
       IMAGE_TAG: ${{ github.sha }}
       
 jobs:
@@ -47,7 +47,7 @@ jobs:
     needs: wiz-cli-dir-scan
     env:
       SCAN_PATH: "." # Set the relative path in the repo to build the image from
-      TAG: $DOCKER_REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG
+      TAG: stanhoe/spring4shell:wizdemo
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
