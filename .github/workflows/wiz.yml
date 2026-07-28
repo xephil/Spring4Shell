@@ -15,8 +15,6 @@ jobs:
   wiz-cli-dir-scan:
     name: "Wiz-cli Dir Scan"
     runs-on: ubuntu-latest
-    env:
-      SCAN_PATH: "." # Set the relative path in the repo to scan
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -32,7 +30,7 @@ jobs:
         run: curl -Lo wizcli https://downloads.wiz.io/v1/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
 
       - name: Run Wiz CLI dir scan
-        run: ./wizcli dir scan $SCAN_PATH --by-policy-hits="DISABLED" --client-id="$WIZ_CLIENT_ID" --client-secret="$WIZ_CLIENT_SECRET"
+        run: ./wizcli dir scan . --by-policy-hits="DISABLED" --client-id="$WIZ_CLIENT_ID" --client-secret="$WIZ_CLIENT_SECRET"
         env:
           WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
           WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
