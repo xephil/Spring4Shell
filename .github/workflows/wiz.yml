@@ -4,13 +4,6 @@ on:
     branches:
       - main
 
-env:
-      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      # DOCKER_REGISTRY: "stanhoe"
-      # DOCKER_REPOSITORY: "spring4shell2"
-      IMAGE_TAG: ${{ github.sha }}
-      
 jobs:
   wiz-cli-dir-scan:
     name: "Wiz-cli Dir Scan"
