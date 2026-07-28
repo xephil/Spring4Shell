@@ -65,6 +65,12 @@ jobs:
           WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
         run: ./wizcli scan container-image $IMAGE --by-policy-hits="DISABLED" --policies="$POLICY"
 
+      - name: Push to Docker Registry
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PW: ${{ secrets.DOCKER_PW }}
+        run: echo "$DOCKER_PW" | docker login -u "$DOCKER_USER" --password-stdin && docker push $IMAGE 
+
       - name: Fetch digest of Docker image for Graph enrichment
         run: ./wizcli tag $IMAGE
 
