@@ -36,7 +36,7 @@ jobs:
         env:
           WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
           WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
-        run: ./wizcli scan dir $SCAN_PATH --by-policy-hits="DISABLED" --client-id="WIZ_CLIENT_ID" --client-secret="WIZ_CLIENT_SECRET"
+        run: ./wizcli scan dir $SCAN_PATH --by-policy-hits="DISABLED"
   
   
   wiz-cli-image-scan:
@@ -70,7 +70,7 @@ jobs:
         env:
           WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
           WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
-        run: ./wizcli scan container-image $IMAGE --by-policy-hits="DISABLED" --policies="$POLICY" --client-id="WIZ_CLIENT_ID" --client-secret="WIZ_CLIENT_SECRET"
+        run: ./wizcli scan container-image $IMAGE --by-policy-hits="DISABLED" --policies="$POLICY"
 
       - name: Fetch digest of Docker image for Graph enrichment
         run: ./wizcli tag $IMAGE
