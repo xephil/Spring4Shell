@@ -36,7 +36,7 @@ jobs:
         env:
           WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
           WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
-        run: ./wizcli scan dir $SCAN_PATH --by-policy-hits="DISABLED"
+        run: ./wizcli scan dir $SCAN_PATH --by-policy-hits="DISABLED" --client-id="WIZ_CLIENT_ID" --client-secret="WIZ_CLIENT_SECRET"
   
   
   wiz-cli-image-scan:
@@ -45,7 +45,8 @@ jobs:
     needs: wiz-cli-dir-scan
     env:
       SCAN_PATH: "." # Set the relative path in the repo to build the image from
-      TAG: stanhoe/spring4shell:wizdemo
+      IMAGE: "stanhoe/spring4shell:wizdemo"
+      POLICY: "Stan-CICD-Vuln" # Set the desired Wiz CLI policy to use
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -60,7 +61,7 @@ jobs:
       # It's possible to skip this step if this job is scheduled after an image-build job.
       # If that's the case, also set "Run wiz CLI docker image scan" step accordingly
       - name: Build the Docker image
-        run: cd $SCAN_PATH && docker build -t $TAG . # Configure to fit the params you use to build your image
+        run: cd $SCAN_PATH && docker build -t $IMAGE . # Configure to fit the params you use to build your image
 
       - name: Download Wiz CLI
         run: curl -Lo wizcli https://downloads.wiz.io/v1/wizcli/latest/wizcli-linux-amd64 && chmod +x wizcli
@@ -69,9 +70,9 @@ jobs:
         env:
           WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
           WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
-        run: ./wizcli scan container-image $TAG --by-policy-hits="DISABLED" --policies="$POLICY"
+        run: ./wizcli scan container-image $IMAGE --by-policy-hits="DISABLED" --policies="$POLICY" --client-id="WIZ_CLIENT_ID" --client-secret="WIZ_CLIENT_SECRET"
 
       - name: Fetch digest of Docker image for Graph enrichment
-        run: ./wizcli tag $TAG
+        run: ./wizcli tag $IMAGE
 
       
